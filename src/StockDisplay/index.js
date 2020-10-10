@@ -1,12 +1,12 @@
 import React, { useState, useEffect} from 'react';
 import {useForm} from "react-hook-form"
-import './stockData'
 
 function StockDisplay() {
 
   const {register, handleSubmit} = useForm();
   const [code, setCode] = useState("")
   const [stock, setStock] = useState({
+
     "Global Quote":{
       "01. symbol": "",
       "02. open": 0,
@@ -21,13 +21,11 @@ function StockDisplay() {
   
   const onSubmit = data => {
     const submittedCode = document.getElementById("myInput").value
-    console.log("Submitted "+ submittedCode)
     setCode(submittedCode)
   }
 
   useEffect(() => {
-    if (code != "") {
-      console.log("Fetching!")
+    if (code !== "") {
       fetch(`https://alpha-vantage.p.rapidapi.com/query?symbol=${code}&function=GLOBAL_QUOTE`, {
         "method": "GET", 
         "headers": { "x-rapidapi-host": "alpha-vantage.p.rapidapi.com", 
@@ -38,12 +36,9 @@ function StockDisplay() {
         return response.json() 
       })
       .then((stockApi) => {
-        console.log("Fetching success!")
         setStock(stockApi)
-        console.log(stock)
       })
       .catch(err => {
-        console.log("Fetching failed.")
         console.log(err);
       });
     }
@@ -55,13 +50,9 @@ function StockDisplay() {
   return (
     <div>
       <h2>Live Stock Price</h2>
-      <br></br>
+      <hr></hr>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input id="myInput" 
-          name="stockCode" 
-          ref={register} 
-          placeholder="Stock Code" 
-        />
+        <input id="myInput" name="stockCode" ref={register} placeholder="Stock Code" />
       </form>
       <h1>{stockSymbol}</h1>
       <h6>{stockPrice}</h6>
